@@ -57,6 +57,11 @@ jobs:
           [ "$found" = 2 ] && exit 0
           [ "$found" = 0 ]
           git fetch -q --depth=1 "$url" versions
+          # Plain files, versions/<id>.json, before anything is written: no link or folder.
+          if git ls-tree -r FETCH_HEAD -- versions | grep -Evq "^100644 blob [0-9a-f]+"$'\t'"versions/[a-z0-9_]{1,64}\.json$"; then
+            echo "::error::the versions branch holds more than versions/<id>.json files: none are read"
+            exit 0
+          fi
           if git cat-file -e FETCH_HEAD:versions 2>/dev/null; then
             git archive FETCH_HEAD versions | tar -x
             python3 -I scripts/sync_releases.py validate . versions --drop

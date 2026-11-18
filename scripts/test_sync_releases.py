@@ -38,7 +38,7 @@ class SyncTests(unittest.TestCase):
         return sync.entries(self.root)[id]
 
     def cache(self, id, tags, repo="author/pack"):
-        versions = [{"version": t, "file": {"url": f"https://github.com/{repo}/releases/download/{t}/pack.zip"}} for t in tags]
+        versions = [{"version": t, "file": {"name": "pack.zip", "url": f"https://github.com/{repo}/releases/download/{t}/pack.zip"}} for t in tags]
         (self.root / "branch" / "versions" / f"{id}.json").write_text(json.dumps({"versions": versions}))
 
     def test_only_entries_with_a_repo(self):
@@ -98,6 +98,36 @@ class SyncTests(unittest.TestCase):
         old = [{"version": "1.0.1", "published": "2026-11-02"}, {"version": "1.0.0", "published": "2026-11-01"}]
         versions = sync.with_version(old, {"version": "1.1.0", "published": "2026-11-02"})
         self.assertEqual([v["version"] for v in versions], ["1.1.0", "1.0.1", "1.0.0"])
+
+    def test_validate_only_assets_of_the_entrys_repository(self):
+        self.entry()
+        versions = self.root / "branch" / "versions"
+        for url in (
+            "https://github.com/author/pack/releases/download/../../../other/repo/releases/download/t/pack.zip",
+            "https://github.com/author/pack/releases/download/t/pack.zip?x=/pack.zip",
+            "https://github.com/author/pack/releases/download/t/sub/pack.zip",
+            "https://github.com/author/pack/releases/download/t/other.zip",
+        ):
+            (versions / "pack.json").write_text(json.dumps({"versions": [{"file": {"name": "pack.zip", "url": url}}]}))
+            self.assertIn("pack.json", sync.problems(self.root, versions), url)
+        self.cache("pack", ["v1.0+b"])
+        self.assertEqual(sync.problems(self.root, versions), {})
+
+    def test_validate_drops_links_and_folders(self):
+        self.entry()
+        versions = self.root / "branch" / "versions"
+        (versions / "pack.json").mkdir()
+        (versions / "pack.json" / "x").write_text("{}")
+        self.assertIn("pack.json", sync.problems(self.root, versions))
+        self.assertEqual(sync.main(["validate", str(self.root), str(versions), "--drop"]), 0)
+        self.assertEqual(list(versions.iterdir()), [])
+        try:
+            (versions / "pack.json").symlink_to(self.root / "mods" / "pack.toml")
+        except OSError:
+            self.skipTest("no symlinks here")
+        self.assertIn("pack.json", sync.problems(self.root, versions))
+        sync.main(["validate", str(self.root), str(versions), "--drop"])
+        self.assertTrue((self.root / "mods" / "pack.toml").is_file())
 
     def test_report_lines_never_start_a_runner_command(self):
         self.assertEqual(sync.flat("id: bad\n::set-output name=x::y\n"), "id: bad | ::set-output name=x::y")

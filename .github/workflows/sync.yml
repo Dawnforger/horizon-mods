@@ -86,7 +86,8 @@ jobs:
         run: |
           mkdir -p out/versions
           python3 -I main/scripts/sync_releases.py validate main out/versions
-          if find out -type f | grep -Ev '^out/(versions|state)/[a-z0-9_]{1,64}\.json$'; then
+          if find out -mindepth 1 ! -type d | grep -Ev '^out/(versions|state)/[a-z0-9_]{1,64}\.json$' \
+            || find out -mindepth 1 -type d | grep -Ev '^out/(versions|state)$'; then
             echo "::error::files other than versions/<id>.json and state/<id>.json"
             exit 1
           fi

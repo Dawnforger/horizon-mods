@@ -51,6 +51,8 @@ REFUSED = {"native-mod": "a native mod's versions are each reviewed: list them i
 ID = re.compile(r"[a-z0-9_]{1,64}")
 REPO = re.compile(r"[A-Za-z0-9_.-]{1,39}/[A-Za-z0-9_.-]{1,100}")
 TAG = re.compile(r"[A-Za-z0-9._+-]{1,128}")
+# A release asset's address as the tool writes it: `<tag>/<name>` after the repository's prefix.
+PART = re.compile(r"[A-Za-z0-9._+-]{1,255}")
 PAGE_KEYS = {"name", "summary", "description", "authors", "license"}
 TOOL = ["cargo", "horizon-mod", "registry"]
 
@@ -259,8 +261,9 @@ def read_release(p, release, trial, work):
         download(asset_url(p["repo"], tag, sigs[0]["name"]), signature, MAX_SIGNATURE)
         args += ["--signature", signature]
     version = json.loads(tool("release", *args))
-    if not version.get("file", {}).get("url", "").startswith(download_prefix(p["repo"])):
-        raise ValueError("the tool listed a file outside the project's repository")
+    file = version.get("file", {})
+    if file.get("url") != f"{download_prefix(p['repo'])}{tag}/{asset['name']}" or file.get("name") != asset["name"]:
+        raise ValueError(f"the tool listed {file.get('url')!r}, not this release's {asset['name']}")
     return version
 
 
@@ -378,6 +381,15 @@ def apply(checkout, branch, plan_file, out):
     return [flat(r) for r in report]
 
 
+def release_asset(url, repo):
+    """Whether `url` is exactly an asset of a release of `repo`: `<prefix><tag>/<name>`."""
+    prefix = download_prefix(repo)
+    if not isinstance(url, str) or not url.startswith(prefix):
+        return False
+    parts = url[len(prefix):].split("/")
+    return len(parts) == 2 and all(PART.fullmatch(x) and x not in (".", "..") for x in parts)
+
+
 def problems(checkout, dir):
     """{file: problem} of a `versions/` folder: only `<id>.json` of an entry with `repo` and a kind
     this sync reads, in the shape `registry build` reads, every file an asset of the entry's own
@@ -388,7 +400,7 @@ def problems(checkout, dir):
         id = path.name.removesuffix(".json")
         e = linked.get(id)
         try:
-            if not path.is_file() or not path.name.endswith(".json"):
+            if path.is_symlink() or not path.is_file() or not path.name.endswith(".json"):
                 raise ValueError("only <id>.json files go here")
             if e is None or e["kind"] not in EXTENSIONS or not valid_repo(e["repo"]):
                 raise ValueError("no entry with a repo for it")
@@ -400,11 +412,12 @@ def problems(checkout, dir):
                 raise ValueError(f"the page holds only {', '.join(sorted(PAGE_KEYS))}")
             if not isinstance(versions, list):
                 raise ValueError("versions is a list")
-            prefix = download_prefix(e["repo"])
             for v in versions:
-                url = v.get("file", {}).get("url") if isinstance(v, dict) and isinstance(v.get("file"), dict) else None
-                if not isinstance(url, str) or not url.startswith(prefix):
-                    raise ValueError(f"a file outside {prefix}")
+                file = v.get("file") if isinstance(v, dict) else None
+                if not isinstance(file, dict) or not release_asset(file.get("url"), e["repo"]):
+                    raise ValueError(f"a file that isn't a release asset of {e['repo']}")
+                if not file["url"].endswith(f"/{file.get('name')}"):
+                    raise ValueError("a file whose name isn't the one at its address")
         except (ValueError, OSError) as err:
             found[path.name] = str(err)
     return found
@@ -427,9 +440,13 @@ def main(argv):
     elif command == "validate" and len(args) in (2, 3) and args[2:] in ([], ["--drop"]):
         found = problems(args[0], args[1])
         for name, problem in found.items():
-            print(f"::error::versions/{name}: {problem}")
+            print(f"::error::versions/{name!r}: {flat(problem)}")
             if args[2:]:
-                pathlib.Path(args[1], name).unlink()
+                path = pathlib.Path(args[1], name)
+                if path.is_dir() and not path.is_symlink():
+                    shutil.rmtree(path)
+                else:
+                    path.unlink()
         return 1 if found and not args[2:] else 0
     else:
         print(__doc__, file=sys.stderr)
