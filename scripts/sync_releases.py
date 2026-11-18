@@ -281,6 +281,12 @@ def read_page(p, trial, work):
     return json.loads(tool("page", trial, p["id"], page))
 
 
+def with_version(versions, version):
+    """Newest first by date; a version read later goes before one of the same day, since releases
+    are read oldest first. The index keeps this order on a tie."""
+    return sorted([version, *versions], key=lambda v: v.get("published", ""), reverse=True)
+
+
 def trial_checkout(checkout, id, root):
     """A registry of this one project, for `registry build`: what publish would make of it."""
     checkout = pathlib.Path(checkout)
@@ -331,7 +337,7 @@ def apply_project(checkout, branch, p, out, report):
             except (ValueError, OSError, json.JSONDecodeError) as e:
                 report.append(f"{id}: page at {p['newest']} left out: {e}")
                 state["page_tag"], state_changed = p["newest"], True
-        for n, release in enumerate(p["releases"]):
+        for n, release in enumerate(reversed(p["releases"])):
             work = tmp / f"release{n}"
             work.mkdir()
             tag = release["tag"]
@@ -339,8 +345,7 @@ def apply_project(checkout, branch, p, out, report):
                 version = read_release(p, release, trial, work)
                 if any(v.get("version") == version.get("version") for v in cache["versions"]):
                     raise ValueError(f"version {version.get('version')} is listed already")
-                versions = sorted([*cache["versions"], version], key=lambda v: v.get("published", ""), reverse=True)
-                candidate = {**cache, "versions": versions}
+                candidate = {**cache, "versions": with_version(cache["versions"], version)}
                 builds(trial, id, candidate)
                 cache, cache_changed = candidate, True
                 if state["failed"].pop(tag, None) is not None:

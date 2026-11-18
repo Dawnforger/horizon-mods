@@ -94,6 +94,11 @@ class SyncTests(unittest.TestCase):
         (versions / "pack.json").write_text('{"page": {"key": "x"}}')
         self.assertIn("pack.json", sync.problems(self.root, versions))
 
+    def test_a_later_release_of_the_same_day_goes_first(self):
+        old = [{"version": "1.0.1", "published": "2026-11-02"}, {"version": "1.0.0", "published": "2026-11-01"}]
+        versions = sync.with_version(old, {"version": "1.1.0", "published": "2026-11-02"})
+        self.assertEqual([v["version"] for v in versions], ["1.1.0", "1.0.1", "1.0.0"])
+
     def test_report_lines_never_start_a_runner_command(self):
         self.assertEqual(sync.flat("id: bad\n::set-output name=x::y\n"), "id: bad | ::set-output name=x::y")
 
