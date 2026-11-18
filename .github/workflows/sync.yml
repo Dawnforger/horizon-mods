@@ -48,6 +48,7 @@ jobs:
           python3 -I scripts/sync_releases.py plan . branch > plan.json
           jq -r '.report[]' plan.json
           jq -r '.projects[] | "\(.id): \(.releases | length) new release(s)\(if .page_due then ", page at \(.newest)" else "" end)"' plan.json
+          jq -e '.projects | length > 0' plan.json >/dev/null || echo "Nothing new."
           echo "work=$(jq '.projects | length > 0' plan.json)" >> "$GITHUB_OUTPUT"
       - if: steps.plan.outputs.work == 'true'
         run: scripts/install-tool.sh

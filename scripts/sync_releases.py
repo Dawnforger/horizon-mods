@@ -225,7 +225,9 @@ def asset_url(repo, tag, name):
 
 def tool(*args):
     """The tool's output, or ValueError with its message."""
-    result = subprocess.run([*TOOL, *map(str, args)], capture_output=True, text=True, timeout=600, check=False)
+    # It reads packages, never runs them; still, it gets no token.
+    env = {k: v for k, v in os.environ.items() if k not in ("GH_TOKEN", "GITHUB_TOKEN")}
+    result = subprocess.run([*TOOL, *map(str, args)], capture_output=True, text=True, timeout=600, check=False, env=env)
     if result.returncode != 0:
         raise ValueError((result.stderr or result.stdout).strip()[-1500:])
     return result.stdout
