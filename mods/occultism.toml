@@ -22,7 +22,7 @@ An unofficial, alpha port to Horizon of [Occultism](https://github.com/klikli-de
 
 **Not in yet:** possessed mobs, wild hordes, familiars, the djinni's and higher spirits' jobs, and Occultism's guide book.
 
-This is a native mod: the launcher builds it after asking you to trust its code, and it runs with your account's permissions. It contains no Minecraft code or assets. Pinned to game 26.3, Horizon SDK `0b14f8a` and horizon-mixins `e59da90`; the full corresponding source is the linked repository.
+This is a native mod: the launcher builds it after asking you to trust its code, and it runs with your account's permissions. It contains no Minecraft code or assets. Pinned to game 26.3, Horizon SDK `0b14f8a` and horizon-mixins `e59da90`, and fits the Nightlies of 2026-11-19 (`5ef7734`) and 2026-11-20 (`0a875da`); the full corresponding source is the linked repository.
 """
 authors = ["KliKli", "Dawnforger"]
 owners = ["Dawnforger"]
@@ -34,9 +34,9 @@ categories = ["magic", "storage"]
 tags = ["occultism", "rituals", "spirits", "chalk", "storage", "port", "alpha"]
 
 [[versions]]
-version = "0.9.0-alpha.1"
-published = "2026-11-18"
+version = "0.9.0-alpha.2"
+published = "2026-11-20"
 game = "26.3"
-file = "occultism-0.9.0-alpha.1.hmod"
-sha256 = "8de98c3af14c725631d88b5719cdc3abfe64974ba0a819ef906395d418d4a34b"
-changelog = "First publication in the SDK format: one native package on Horizon's mod API. Adds the working foliots (janitor, transporter, lumberjack, farmer) and soul gems."
+file = "occultism-0.9.0-alpha.2.hmod"
+sha256 = "4e600aa76c7ae2727c9e38ba3bd88b0325ad1de11a52b15848a2889e3c31f57b"
+changelog = "First publication in the SDK format: one native package on Horizon's mod API, with the working foliots (janitor, transporter, lumberjack, farmer) and soul gems. Fits Horizon's newer Nightlies and carries all of Occultism's notices."
