@@ -22,7 +22,7 @@ An unofficial, alpha port to Horizon of [Occultism](https://github.com/klikli-de
 
 **Not in yet:** possessed mobs, wild hordes, familiars, the djinni's and higher spirits' jobs, and Occultism's guide book.
 
-This is a native mod: the launcher builds it after asking you to trust its code, and it runs with your account's permissions. It contains no Minecraft code or assets. Pinned to game 26.3, Horizon SDK `0b14f8a` and horizon-mixins `e59da90`, and fits the Nightlies of 2026-11-19 (`5ef7734`) and 2026-11-20 (`0a875da`); the full corresponding source is the linked repository.
+This is a native mod: the launcher builds it after asking you to trust its code, and it runs with your account's permissions. It contains no Minecraft code or assets. Pinned to game 26.3, Horizon SDK `0b14f8a` and horizon-mixins `e59da90`, and fits the Nightly of 2026-11-21 (`8f83e5c`); the full corresponding source is the linked repository.
 """
 authors = ["KliKli", "Dawnforger"]
 owners = ["Dawnforger"]
@@ -34,9 +34,9 @@ categories = ["magic", "storage"]
 tags = ["occultism", "rituals", "spirits", "chalk", "storage", "port", "alpha"]
 
 [[versions]]
-version = "0.9.0-alpha.3"
+version = "0.9.0-alpha.4"
 published = "2026-11-21"
 game = "26.3"
-file = "occultism_horizon-0.9.0-alpha.3.hmod"
-sha256 = "75e53a4f8f62ba7f64460c9f176a62d7338127307eb0fd46dcca6c1b1b054431"
-changelog = "Registered under its own id, occultism_horizon, because occultism is taken. Only the manifest changed from alpha.2: id, namespaces = [\"occultism\"] (files, in-game ids and saved worlds are unchanged) and [incompatible] with occultism. Remove any installed occultism first."
+file = "occultism_horizon-0.9.0-alpha.4.hmod"
+sha256 = "e82b9eddef8b451c64d1563b6a5207628bf7d58d15de3897715d7d857358dce8"
+changelog = "Registered under its own id, occultism_horizon, because occultism is taken: id, namespaces = [\"occultism\"] (files, in-game ids and saved worlds are unchanged) and [incompatible] with occultism; remove any installed occultism first. Security fixes from the registry review: store ids read from items and worlds are accepted only in the mod's own form, so a forged one can't make a save write outside the world, and a soul gem's work area only at its real sizes, so a forged one can't stall the server."
