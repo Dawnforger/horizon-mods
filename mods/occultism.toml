@@ -1,42 +1,45 @@
 id = "occultism"
 kind = "native-mod"
-name = "Occultism"
-summary = "Occultism by KliKli, ported to Horizon: ritual circles, spirits, working foliots, soul gems, dimensional storage and the mineshaft."
+name = "occultism"
+summary = "A Horizon port of occultism."
 description = """
-An unofficial, alpha port to Horizon of [Occultism](https://github.com/klikli-dev/occultism), the mod by KliKli ([klikli-dev](https://github.com/klikli-dev)), made with their permission. It isn't made or supported by KliKli, so please report problems [to this port](https://github.com/Dawnforger/occultism-horizon/issues), not to them. Occultism's code is MIT and some of its art is CC BY 3.0, both credited in the package's NOTICE.
+A port of [Occultism](https://github.com/klikli-dev/occultism) (MIT, by klikli-dev) for Horizon. This first slice is **spirit fire**: the block, its ignition, and the chalk colours it takes.
 
-**What's in this alpha**
+**Implemented so far**
 
-- **Ritual circles.** Chalk glyphs that wear down as you use them, sacrificial bowls and a golden bowl, and Occultism's rituals, with their sacrifices and item uses.
-- **Spirit names.** Books of binding carry their spirit's name, and what is made from them passes it on.
-- **Working foliots.** Summoned with a job and bound to a book of calling: the janitor gathers dropped items, the transporter moves stacks between containers, the lumberjack fells and replants trees, and the farmer harvests and replants crops, each bringing what it gathers to a container.
-- **Soul gems.** Capture a creature whole and let it out elsewhere.
-- **Unbound spirits.** Summon a hostile Afrit or Marid, drawn from Occultism's own models and animations, with its stats, immunities and helpers.
-- **The Demonic Altar.** A bound crusher spirit grinds ores into dusts at its rank's speed.
-- **Spirit fire and Demon's Dream.** Datura, otherstone, books of binding, inks and more.
-- **The Third Eye and otherworld goggles.** Raw iesnium in silver ore, otherworld logs among the oaks you chop.
-- **Dimensional storage.** The Storage Actuator in Occultism's terminal look with its crafting grid, stabilizer plates, stable wormholes, the Storage Accessor, and hoppers that pull from it.
-- **The dimensional mineshaft.** Miner spirits dig ores into it.
+- `occultism:spirit_fire` on the `minecraft:torch` template (vanilla's only fire-like class with no fire damage and a sturdy-face survival rule): no collision, instant break, light 12, wool sound, purple map colour, empty drops, and a declinable `color` state with the jar's 18 values (default `white`), with the jar's animated model and blockstate.
+- Ignition: flint and steel or a fire charge struck on a block with a `#occultism:start_spiritfire` item entity (datura) inside upstream's `AABB(-1,-1,-1,1,1,1)` around the clicked block's centre lights one spirit fire on the target and consumes **every** datura in that box, as upstream does. With no datura in range nothing happens and the lighter's own use runs.
+- Chalk: right-clicking a spirit fire with any of the jar's chalks (16 colours, pure and impure) sets the block's `color` property.
+- The datura item, the 33 chalk items, the spirit fire's own recipe, loot and language, carried inside the one `.hnmod`.
+- `/occultism` readout commands for the harness.
 
-**Different from Occultism for now:** the book of calling has no screen (its mode and work area change when you use it, and its tooltip shows them); spirits take no item filters; the transporter doesn't open doors; the lumberjack's summoning takes a jungle sapling for the otherworld sapling, whose trees aren't in this port.
+**Not yet ported**
 
-**Not in yet:** possessed mobs, wild hordes, familiars, the djinni's and higher spirits' jobs, and Occultism's guide book.
+| Declared upstream library | What it would have provided | What this slice does |
+|---|---|---|
+| Modonomicon (required) | the guide book and its 260 pages, ritual and recipe pages | nothing: there is no guide-book reader at this pin |
+| Curios (required) | accessory slots (familiar ring, spirit lamp) | nothing: there is no accessory-slot API |
+| GeckoLib | the 21 animated spirit models | nothing: no spirits in this slice |
+| SmartBrainLib | the spirits' job AI | nothing: no spirits in this slice |
 
-This is a native mod: the launcher builds it after asking you to trust its code, and it runs with your account's permissions. It contains no Minecraft code or assets. Pinned to game 26.3, Horizon SDK `0b14f8a` and horizon-mixins `e59da90`, and fits the Nightlies of 2026-11-19 (`5ef7734`) and 2026-11-20 (`0a875da`); the full corresponding source is the linked repository.
+- The remaining machines (crusher, smelter, sacrificial bowl, pentacles and rituals), every spirit and their jobs, the storage system and the dimensional mineshaft are later slices.
+- The ritual and chalk recipes beyond the ones carried, and the sapling models the carried sapling item references.
+
+MIT; the original copyright and permission notices (klikli-dev, 2020) ship inside the package: `LICENSE` and `LICENSE-NOTICE.md` at its root, with the same texts in the source repository.
 """
-authors = ["KliKli", "Dawnforger"]
-owners = ["Dawnforger"]
-owner_ids = [73370299]
-license = "MIT AND CC-BY-3.0"
-source = "https://github.com/Dawnforger/occultism-horizon"
+authors = ["Kli Kli", "AdLf0208"]
+owners = ["AdLf0208"]
+owner_ids = [107615167]
+license = "MIT"
+source = "https://github.com/AdLf0208/occultism"
 icon = "icons/occultism.png"
-categories = ["magic", "storage"]
-tags = ["occultism", "rituals", "spirits", "chalk", "storage", "port", "alpha"]
+categories = ["utility"]
+tags = ["port", "horizon"]
 
 [[versions]]
-version = "0.9.0-alpha.2"
-published = "2026-11-20"
+version = "0.2.2"
+published = "2026-11-21"
 game = "26.3"
-file = "occultism-0.9.0-alpha.2.hmod"
-sha256 = "4e600aa76c7ae2727c9e38ba3bd88b0325ad1de11a52b15848a2889e3c31f57b"
-changelog = "First publication in the SDK format: one native package on Horizon's mod API, with the working foliots (janitor, transporter, lumberjack, farmer) and soul gems. Fits Horizon's newer Nightlies and carries all of Occultism's notices."
+file = "occultism.hmod"
+sha256 = "35714e6fd044bf52c4d2a3c63c68dabee5a3aa898525700e5ffdbfd54bdd38e2"
+changelog = """First publication, with the review repairs. Spirit fire, its datura ignition rule and the 18 chalk colours, with the jar's models, recipes and loot. `/occultism info` is now a level-2 command **with** a body re-check, and a position holding no spirit fire answers only that it is not one — the readout no longer doubles as a world probe. A spectator's click changes nothing: the hook checks the player's game mode before recolouring, lighting a fire or consuming datura, and fails closed on an unknown mode. The conversion ring is bounded and keyed per world and dimension."""

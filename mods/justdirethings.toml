@@ -1,0 +1,47 @@
+id = "justdirethings"
+kind = "native-mod"
+name = "justdirethings"
+summary = "A Horizon port of justdirethings."
+description = """
+A port of [Just Dire Things](https://github.com/Direwolf20-MC/JustDireThings) by Direwolf20 for Horizon — slice 1, the Simple Coal Generator.
+
+**Implemented so far**
+
+- `justdirethings:generatort1` and the four coals it burns (`coal_t1`..`coal_t4`): one block, an insert-only FE buffer, one fuel slot, one tick, no neighbour reads, no GUI needed to prove it, no fluid and no entity.
+- The jar's buffer size, FE per tick and per-coal output, read from the generator's own class rather than a config default.
+- The generator's block entity, energy capability and container, with its carried blockstate, model, texture, loot, recipe and English names.
+- `/justdirethings info` readout for the headless harness.
+
+**Not yet ported**
+
+- **Push-out to neighbours** (`providePowerAdjacent`, `fePerTick × 10` per side): API 142 offers `native_move_energy`, but the sink upstream expects is the Energy Transmitter, which is not ported.
+- **No GUI/menu:** upstream opens `GeneratorT1Screen`; this slice has no menu type, so right-click does nothing and the fields are read by command.
+- **The Fuel Generator** (`generatorfluidt1`): 5,000,000 FE buffer, 5,000 FE/t and the tiered fuel fluids; it needs fluid tanks and a fluid capability.
+- **The Energy Transmitter** (the network, per-side throughput) and the rest of the mod: the pocket generator, item/block automation, the tools, the armour and the paradox items.
+
+The original copyright and licence notices travel inside the distributed archive (`mixins/justdirethings/LICENSE` and `NOTICE.md`) and are also in this repository. MIT. Pinned to Horizon 1d63e0a and horizon-mixins 5a64af93.
+"""
+authors = ["Direwolf20", "AdLf0208"]
+owners = ["AdLf0208"]
+owner_ids = [107615167]
+license = "MIT"
+source = "https://github.com/AdLf0208/just_dire_things"
+icon = "icons/justdirethings.png"
+categories = ["utility"]
+tags = ["port", "horizon"]
+
+[[versions]]
+version = "0.2.1"
+published = "2026-11-10"
+game = "26.3"
+file = "justdirethings.hmod"
+sha256 = "62c233cb7112e60a66c150dd6472dd079600af0ee92eb4701dc53e61f52104df"
+changelog = "First release"
+
+[[versions]]
+version = "0.2.3"
+published = "2026-11-21"
+game = "26.3"
+file = "justdirethings.hmod"
+sha256 = "8c9be198d40173d28253eb1b6d86ee7c8a6b4bc50d6e8578f28c184e5372a3cd"
+changelog = """Slice 2, the generator's redstone control: the four upstream modes (ignore, low, high, pulse) on `RedstoneControlledBE`, the base-class behaviour every later Just Dire Things machine inherits. Three saved keys, one tick gate, and the payload carries the recorded edge so a pulse fires once per edge. A defect found in the in-game leg and fixed: the tick replied `Unchanged` when nothing burnt, which discarded the recorded falling edge, so the second pulse bought no burn — the reply now persists when anything burnt, a fuel item was pulled, or the redstone control changed. Two of the port's own gap claims were corrected from the jar rather than copied: upstream has no comparator output in 1.5.7, and the mode set is four, not "beyond ignored". Proven in game: high runs only while powered, low freezes while powered, pulse buys 1,500 FE per edge with the stick count falling 4 to 3 to 2 while a held signal buys nothing, and a guest 40 blocks away is refused both commands while one a block away is allowed."""
