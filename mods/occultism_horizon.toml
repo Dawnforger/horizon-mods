@@ -55,9 +55,9 @@ sha256 = "e82b9eddef8b451c64d1563b6a5207628bf7d58d15de3897715d7d857358dce8"
 changelog = "Registered under its own id, occultism_horizon, because occultism is taken: id, namespaces = [\"occultism\"] (files, in-game ids and saved worlds are unchanged) and [incompatible] with occultism; remove any installed occultism first. Security fixes from the registry review: store ids read from items and worlds are accepted only in the mod's own form, so a forged one can't make a save write outside the world, and a soul gem's work area only at its real sizes, so a forged one can't stall the server."
 
 [[versions]]
-version = "0.11.1-alpha.2"
+version = "0.11.2-alpha.1"
 published = "2026-11-21"
 game = "26.3"
-file = "occultism_horizon-0.11.1-alpha.2.hmod"
-sha256 = "8a9649ad5f8aa95141a6024646f95a5634e57f5d37ad1a27a3914857a2de79c1"
-changelog = "0.10 and 0.11 in one step. Added: Occultism's chalk crafting in all sixteen colours, crusher spirits (in place of the Demonic Altar and its cores, removed), smelter and crystallizer spirits, sixteen possessed creatures, pastes, cursed honey and demonic meat, the otherworld tree, the spirit campfire, and the Dictionary of Spirits with pentacle previews and ritual satchels. Fixed: whole cubes on the dimensional matrix, no see-through floor under the mineshaft, Actuator and wormhole, and ritual pages' text. Includes 0.9.0-alpha.4's security fixes. Same id, namespace and saved worlds as 0.9.0-alpha.4."
+file = "occultism_horizon-0.11.2-alpha.1.hmod"
+sha256 = "470fb1c115f772a9ccfbda6647dab042fe1bbe672cfd50fe1814a39a008f1520"
+changelog = "0.10 and 0.11 in one step. Added: Occultism's chalk crafting in all sixteen colours, crusher spirits (in place of the Demonic Altar and its cores, removed), smelter and crystallizer spirits, sixteen possessed creatures, pastes, cursed honey and demonic meat, the otherworld tree, the spirit campfire, and the Dictionary of Spirits with pentacle previews and ritual satchels. Fixed: whole cubes on the dimensional matrix, no see-through floor under the mineshaft, Actuator and wormhole, and ritual pages' text. Security: a ritual satchel builds only for a player who may build, within reach of the place clicked, as part of the previewed pentacle and inside the world border, with at most 4 builds waiting per player; and 0.9.0-alpha.4's fixes. Same id, namespace and saved worlds as 0.9.0-alpha.4."
