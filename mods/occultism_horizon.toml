@@ -10,7 +10,7 @@ An unofficial, alpha port to Horizon of [Occultism](https://github.com/klikli-de
 **What's in this alpha**
 
 - **Ritual circles.** All sixteen chalks, crafted as in Occultism, with glyphs that wear down as you use them, sacrificial bowls and a golden bowl, and Occultism's rituals and pentacles, with their sacrifices and item uses.
-- **The Dictionary of Spirits.** Occultism's guide book, with its ritual pages, pentacle previews placed in the world, and the ritual satchels that build a previewed circle for you.
+- **The Dictionary of Spirits.** Occultism's guide book, with its ritual pages, and pentacle previews placed in the world.
 - **Spirit names.** Books of binding carry their spirit's name, and what is made from them passes it on.
 - **Working foliots.** Summoned with a job and bound to a book of calling: the janitor gathers dropped items, the transporter moves stacks between containers, the lumberjack fells and replants trees, and the farmer harvests and replants crops, each bringing what it gathers to a container.
 - **Soul gems.** Capture a creature whole and let it out elsewhere.
@@ -30,9 +30,9 @@ An unofficial, alpha port to Horizon of [Occultism](https://github.com/klikli-de
 
 **Different from Occultism for now:** the book of calling has no screen (its mode and work area change when you use it, and its tooltip shows them); spirits take no item filters; the transporter doesn't open doors.
 
-**Not in yet:** familiars and the familiar glove, the higher spirits' other jobs, satchels and tablets, and the dark storage blocks.
+**Not in yet:** familiars and the familiar glove, the higher spirits' other jobs, satchels building circles (off until the SDK can check spawn protection), tablets, and the dark storage blocks.
 
-This is a native mod: the launcher builds it after asking you to trust its code, and it runs with your account's permissions. It contains no Minecraft code or assets. Pinned to game 26.3, Horizon SDK `0b14f8a` and horizon-mixins `e59da90`, and fits the Nightly of 2026-11-21 (`8f83e5c`); the full corresponding source is the linked repository.
+This is a native mod: the launcher builds it after asking you to trust its code, and it runs with your account's permissions. It contains no Minecraft code or assets. Pinned to game 26.3, Horizon SDK `8f83e5c` (Nightly 2026-11-21) and horizon-mixins `e59da90`; the full corresponding source is the linked repository.
 """
 authors = ["KliKli", "Dawnforger"]
 owners = ["Dawnforger"]
@@ -78,9 +78,9 @@ sha256 = "83089f9281a9997c2ee331b9e983e77e097bec597cee591059ff89f2eca1530d"
 changelog = "Much more of Occultism. Added: weather and time magic; otherstone, otherrock and gambler traders; the wild hordes, Wild Hunt, illager invasion and trial breezes; random-animal possessions and resurrections; flaming paste; silver and infused tools and armour, the butcher knives and their drops; large candles, golden pitayas, otherglass, the otherflower, otherrock and silver building blocks; copper, silver, dark and iesnium bowls (iesnium runs rituals four times as fast); the spirit lantern and torch; ritual particles and chalk-coloured spirit fire. Security, from the registry review: flaming paste no longer sets fire or pours lava beside the block it is used on, throws fireballs or primes TNT, and the spirit torch isn't put on walls, as none of these could go through the server's own checks (spawn protection, the world border, TNT's priming) at this SDK pin. Same id, namespace and saved worlds as 0.11.2-alpha.1."
 
 [[versions]]
-version = "0.13.0-alpha.1"
-published = "2026-11-23"
+version = "0.13.1-alpha.1"
+published = "2026-11-24"
 game = "26.3"
-file = "occultism_horizon-0.13.0-alpha.1.hmod"
-sha256 = "13d07693d121431dbcd573c7cc6a876f3a5cb952bfae8028e5b7f7fb49d8b75b"
-changelog = "Occultism's eldritch rituals: rainbow and void chalk, the celestial and eldritch chalices, the trinity gem, the bedrock gem cluster and the ancient eldritch miner, tier 5 stabilizers, stabilized storage and Infuse with Unbreakable. Fixed: a sacrificial bowl takes any stack (an Actuator carrying its store, an enchanted or named tool), and an Actuator shows its fill right past 32 million items. About 52.5% of Occultism is ported now. Same id, namespace and saved worlds as 0.12.2-alpha.1."
+file = "occultism_horizon-0.13.1-alpha.1.hmod"
+sha256 = "16f5fc711f54adf283150e673126a0d5557c82f8dd05ec44faae8436f0f6a9f2"
+changelog = "Occultism's eldritch rituals: rainbow and void chalk, the celestial and eldritch chalices, the trinity gem, the bedrock gem cluster and the ancient eldritch miner, tier 5 stabilizers, stabilized storage and Infuse with Unbreakable. Fixed: a sacrificial bowl takes any stack (an Actuator carrying its store, an enchanted or named tool), and an Actuator shows its fill right past 32 million items. Security, from the registry review: soul gems capture only for a player who may build, never another player's pet or an invulnerable creature, and release only where the player may use the gem, into an open place inside the world border (the trinity gem refuses the ender dragon); a ritual takes ingredients only from the bowls its caster filled; ritual satchels no longer build circles, which the SDK can't check against spawn protection. Pinned to Nightly 2026-11-21 (8f83e5c). About 52.5% of Occultism is ported now. Same id, namespace and saved worlds as 0.12.2-alpha.1."
